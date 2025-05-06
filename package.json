@@ -1,0 +1,25 @@
+{
+  "name": "realtime-log-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run --parallel -r dev",
+    "build": "pnpm run -r build",
+    "start": "pnpm run -r start",
+    "lint": "pnpm run -r lint",
+    "test": "pnpm run -r test"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "vitest": "^3.1.2"
+  }
+}
