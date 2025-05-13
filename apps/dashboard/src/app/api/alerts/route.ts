@@ -6,7 +6,6 @@ import { sql } from '@log-monitor/database';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const paginationParams = getPaginationParams(searchParams);
-  console.log('paginationParams', paginationParams);
 
   return withPaginatedDb(
     async (db, params) => {

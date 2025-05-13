@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
     "lint": "eslint src --ext .ts"
   },

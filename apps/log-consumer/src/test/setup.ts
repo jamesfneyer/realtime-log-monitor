@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { afterAll, jest } from '@jest/globals';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { Schema } from '@log-monitor/database';

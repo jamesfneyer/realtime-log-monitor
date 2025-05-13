@@ -1,20 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ESNext"],
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "noEmit": true,
-    "isolatedModules": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "types": ["node", "jest"]
-  },
-  "exclude": ["**/node_modules", "**/dist"]
+  "extends": "./tsconfig.base.json",
+  "include": ["./apps/**/*.ts", "./packages/**/*.ts", "**/*.spec.ts"]
 } 

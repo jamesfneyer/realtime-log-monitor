@@ -132,9 +132,13 @@ class LogConsumer {
     
     await Promise.all([
       this.logService.storeLog(logEvent),
-      this.statsService.updateStats(logEvent).then(stats => 
-        this.alertService.checkAndTriggerAlerts(logEvent, stats)
-      ),
+      this.statsService.updateStats(logEvent).then(stats => {
+        const statsRecord: Record<string, { errorCount: number }> = {};
+        for (const [service, count] of Object.entries(stats)) {
+          statsRecord[service] = { errorCount: count };
+        }
+        return this.alertService.checkAndTriggerAlerts(logEvent, statsRecord);
+      }),
     ]);
   }
 
@@ -152,6 +156,16 @@ class LogConsumer {
       const port = process.env.PORT || 3001;
       this.server = this.app.listen(port, () => {
         console.log(`Server running on port ${port}`);
+      }).on('error', (error: NodeJS.ErrnoException) => {
+        if (error.code === 'EADDRINUSE') {
+          console.error(`Port ${port} is already in use. Please try a different port or kill the process using this port.`);
+          console.error('You can find the process using: lsof -i :' + port);
+          console.error('And kill it using: kill -9 <PID>');
+          process.exit(1);
+        } else {
+          console.error('Error starting server:', error);
+          process.exit(1);
+        }
       });
     } catch (error) {
       console.error('Error in log consumer:', error);

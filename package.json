@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "pnpm run -r clean",
     "dev": "pnpm run --parallel -r dev",
+    "dev:dashboard": "pnpm run --filter @log-monitor/dashboard dev",
+    "dev:log-consumer": "pnpm run --filter @log-monitor/log-consumer dev",
     "build": "pnpm run -r build",
     "start": "pnpm run -r start",
+    "start:all": "concurrently \"docker-compose up\" \"pnpm run dev:dashboard\"",
     "lint": "pnpm run -r lint",
-    "test": "pnpm run -r test"
+    "test": "pnpm run -r test",
+    "test:all": "jest",
+    "test:websocket-server": "jest --config apps/websocket-server/jest.config.js",
+    "test:log-consumer": "jest --config apps/log-consumer/jest.config.js"
   },
   "workspaces": [
     "packages/*",
@@ -19,7 +26,11 @@
   },
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.15.3",
+    "concurrently": "^9.1.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
     "vitest": "^3.1.2"
   }
 }

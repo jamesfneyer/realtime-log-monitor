@@ -1,4 +1,6 @@
-import { jest } from '@jest/globals';
+import { afterAll, afterEach, jest } from '@jest/globals';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 // Mock Redis
 jest.mock('ioredis', () => require('ioredis-mock'));

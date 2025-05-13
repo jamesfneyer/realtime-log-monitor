@@ -5,17 +5,17 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { Schema } from '@log-monitor/database';
 import { LogEvent } from '@log-monitor/types';
 import { ServiceStats } from '../services/stats';
-import type { NotificationService, NotificationOptions } from '../types/notification';
+import { NodeNotifier } from 'node-notifier';
 
 describe('AlertService', () => {
   const mockDb = createMockDbClient() as jest.Mocked<PostgresJsDatabase<Schema>>;
-  const mockNotifier: jest.Mocked<NotificationService> = {
+  const mockNotifier = {
     notify: jest.fn(),
     on: jest.fn(),
     once: jest.fn(),
     emit: jest.fn(),
     removeAllListeners: jest.fn(),
-  };
+  } as unknown as NodeNotifier;
   const alertService = new AlertService(mockDb, mockNotifier);
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('AlertService', () => {
     it('should trigger an alert when error rate exceeds threshold', async () => {
       const logEvent: LogEvent = {
         id: '1',
-        service: 'test-service',
+        service: 'testService',
         level: 'ERROR',
         message: 'Test error',
         timestamp: new Date().toISOString(),
@@ -40,6 +40,10 @@ describe('AlertService', () => {
         totalLogs: 100,
         errorLogs: 15,
         errorRate: 0.15,
+      };
+
+      const serviceErrorCounts = {
+        testService: { errorCount: 15 },
       };
 
       // Mock shouldTriggerAlert to return true
@@ -63,11 +67,11 @@ describe('AlertService', () => {
       // Mock storeAlert to resolve immediately
       jest.spyOn(alertService as any, 'storeAlert').mockResolvedValue(undefined);
 
-      await alertService.checkAndTriggerAlerts(logEvent, stats);
+      await alertService.checkAndTriggerAlerts(logEvent, serviceErrorCounts);
 
       expect(mockNotifier.notify).toHaveBeenCalledWith(expect.objectContaining({
         title: 'Log Monitor Alert',
-        message: expect.stringContaining('test-service'),
+        message: expect.stringContaining('testService'),
         sound: true,
       }));
     });
@@ -75,22 +79,20 @@ describe('AlertService', () => {
     it('should not trigger an alert when error rate is below threshold', async () => {
       const logEvent: LogEvent = {
         id: '1',
-        service: 'test-service',
+        service: 'testService',
         level: 'ERROR',
         message: 'Test error',
         timestamp: new Date().toISOString(),
       };
 
-      const stats: ServiceStats = {
-        totalLogs: 100,
-        errorLogs: 5,
-        errorRate: 0.05,
+      const serviceErrorCounts = {
+        testService: { errorCount: 15 },
       };
 
       // Mock shouldTriggerAlert to return false
       jest.spyOn(alertService as any, 'shouldTriggerAlert').mockReturnValue(false);
 
-      await alertService.checkAndTriggerAlerts(logEvent, stats);
+      await alertService.checkAndTriggerAlerts(logEvent, serviceErrorCounts);
 
       expect(mockNotifier.notify).not.toHaveBeenCalled();
     });

@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { LogEvent, LogLevel } from '@log-monitor/types';
+import { LogGenerator } from './log-producer.service';
 
 export interface LogGeneratorConfig {
   readonly services: readonly string[];

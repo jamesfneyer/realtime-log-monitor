@@ -4,12 +4,14 @@ import { PaginationParams, PaginatedResponse } from './pagination';
 
 type ApiResponse<T> = NextResponse<T | { error: string }>;
 
+// Create a single database connection
+const db = createDbClient();
+
 export async function withDb<T>(
   operation: (db: ReturnType<typeof createDbClient>) => Promise<T>,
   errorMessage: string
 ): Promise<ApiResponse<T>> {
   try {
-    const db = createDbClient();
     const result = await operation(db);
     return NextResponse.json(result);
   } catch (error) {
@@ -30,7 +32,6 @@ export async function withPaginatedDb<T>(
   errorMessage: string
 ): Promise<ApiResponse<PaginatedResponse<T>>> {
   try {
-    const db = createDbClient();
     const { data, total } = await operation(db, params);
     return NextResponse.json({
       data,
@@ -49,4 +50,4 @@ export async function withPaginatedDb<T>(
       { status: 500 }
     );
   }
-} 
+}

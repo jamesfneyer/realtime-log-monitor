@@ -7,9 +7,9 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "clean": "rimraf dist",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external drizzle-orm --clean",
+    "clean": "rm -rf dist",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch --external drizzle-orm",
     "lint": "eslint src --ext .ts",
     "push": "drizzle-kit push"
   },
@@ -27,6 +27,14 @@
     "@types/pg": "^8.11.0",
     "tsup": "^8.0.0",
     "typescript": "^5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
   },
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
