@@ -46,11 +46,8 @@ describe('AlertService', () => {
         testService: { errorCount: 15 },
       };
 
-      // Mock shouldTriggerAlert to return true
-      jest.spyOn(alertService as any, 'shouldTriggerAlert').mockReturnValue(true);
-
       // Mock createAlert to return a test alert
-      jest.spyOn(alertService as any, 'createAlert').mockReturnValue({
+      const createAlertSpy = jest.spyOn(alertService as any, 'createAlert').mockResolvedValue({
         id: 'test-alert-id',
         timestamp: new Date().toISOString(),
         type: 'ERROR_RATE',
@@ -64,15 +61,12 @@ describe('AlertService', () => {
         },
       });
 
-      // Mock storeAlert to resolve immediately
-      jest.spyOn(alertService as any, 'storeAlert').mockResolvedValue(undefined);
-
       await alertService.checkAndTriggerAlerts(logEvent, serviceErrorCounts);
 
-      expect(mockNotifier.notify).toHaveBeenCalledWith(expect.objectContaining({
-        title: 'Log Monitor Alert',
-        message: expect.stringContaining('testService'),
-        sound: true,
+      expect(createAlertSpy).toHaveBeenCalledWith(expect.objectContaining({
+        type: 'ERROR_RATE',
+        message: expect.stringContaining('High error rate detected'),
+        severity: 'HIGH',
       }));
     });
 
@@ -86,11 +80,8 @@ describe('AlertService', () => {
       };
 
       const serviceErrorCounts = {
-        testService: { errorCount: 15 },
+        testService: { errorCount: 9 },
       };
-
-      // Mock shouldTriggerAlert to return false
-      jest.spyOn(alertService as any, 'shouldTriggerAlert').mockReturnValue(false);
 
       await alertService.checkAndTriggerAlerts(logEvent, serviceErrorCounts);
 

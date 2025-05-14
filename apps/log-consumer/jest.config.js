@@ -1,9 +1,21 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const base = require('../../jest.config.base');
-module.exports = {
-  ...base,
-  rootDir: './',
-  // You can override/add service-specific config here if needed
+/** @type {import('jest').Config} */
+export default {
+  preset: 'ts-jest/presets/default-esm',
+  testEnvironment: 'node',
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@log-monitor|@clipboard-health)/)',
+  ],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 };

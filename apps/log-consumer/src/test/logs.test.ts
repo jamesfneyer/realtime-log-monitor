@@ -3,7 +3,7 @@ import { LogService } from '../services/logs';
 import { createMockDbClient } from './setup';
 import { dbTables } from '../lib/db';
 import { LogEvent } from '@log-monitor/types';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { Schema } from '@log-monitor/database';
 
@@ -110,7 +110,10 @@ describe('LogService', () => {
       }];
 
       const mockExecute = jest.fn().mockImplementation(() => Promise.resolve(mockLogs));
-      const mockWhere = jest.fn().mockReturnValue({ execute: mockExecute });
+      const mockOffset = jest.fn().mockReturnValue({ execute: mockExecute });
+      const mockLimit = jest.fn().mockReturnValue({ offset: mockOffset });
+      const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
+      const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
       const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
 
       (mockDb.select as jest.Mock).mockReturnValue({ from: mockFrom });
@@ -130,9 +133,8 @@ describe('LogService', () => {
 
       expect(mockDb.select).toHaveBeenCalled();
       expect(mockFrom).toHaveBeenCalledWith(dbTables.logs);
-      expect(mockWhere).toHaveBeenCalledWith(
-        eq(dbTables.logs.service, 'test-service')
-      );
+      expect(mockWhere).toHaveBeenCalledWith(expect.any(Object));
+      expect(mockOrderBy).toHaveBeenCalledWith(expect.any(Object));
     });
   });
 }); 

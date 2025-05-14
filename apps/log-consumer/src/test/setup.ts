@@ -13,7 +13,13 @@ type MockInsertFunction = <TTable extends PgTable>(table: TTable) => {
 type MockSelectFunction = <TFrom extends PgTable>(source: TFrom) => {
   from: (table: TFrom) => {
     where: (condition: unknown) => {
-      execute: () => Promise<unknown[]>;
+      orderBy: (order: unknown) => {
+        limit: (limit: number) => {
+          offset: (offset: number) => {
+            execute: () => Promise<unknown[]>;
+          };
+        };
+      };
     };
   };
 };
@@ -44,8 +50,20 @@ export function createMockDbClient(): PostgresJsDatabase<Schema> {
     return Promise.resolve(mockLogs);
   });
 
-  const mockWhere = jest.fn().mockReturnValue({
+  const mockOffset = jest.fn().mockReturnValue({
     execute: mockExecute,
+  });
+
+  const mockLimit = jest.fn().mockReturnValue({
+    offset: mockOffset,
+  });
+
+  const mockOrderBy = jest.fn().mockReturnValue({
+    limit: mockLimit,
+  });
+
+  const mockWhere = jest.fn().mockReturnValue({
+    orderBy: mockOrderBy,
   });
 
   const mockFrom = jest.fn().mockReturnValue({
@@ -89,4 +107,4 @@ export function createMockDbClient(): PostgresJsDatabase<Schema> {
 afterAll(async () => {
   // Wait for any pending promises to resolve
   await new Promise(resolve => setTimeout(resolve, 100));
-}); 
+});

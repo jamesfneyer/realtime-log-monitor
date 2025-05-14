@@ -13,10 +13,6 @@ import * as schema from './schema';
 // Create a wrapper function for desc
 export const desc = drizzleDesc;
 
-// Debug logging
-console.log('Database package - desc:', desc);
-console.log('Database package - sql:', sql);
-
 export * from './schema';
 export * from './config';
 export * from './types';

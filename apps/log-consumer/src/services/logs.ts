@@ -2,10 +2,6 @@ import { LogEvent } from '@log-monitor/types';
 import { DbClient, dbTables, LogInsert } from '../lib/db';
 import { eq, and, gte, lte, desc } from 'drizzle-orm';
 
-interface LogRecord extends Omit<LogEvent, 'timestamp'> {
-  readonly timestamp: Date;
-}
-
 type LogError = {
   readonly code: 'INVALID_TIMESTAMP' | 'DATABASE_ERROR';
   readonly message: string;
