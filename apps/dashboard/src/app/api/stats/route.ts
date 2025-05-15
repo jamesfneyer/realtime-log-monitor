@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { serviceStats } from '@log-monitor/database';
 import { createDbClient } from '@log-monitor/database';
 

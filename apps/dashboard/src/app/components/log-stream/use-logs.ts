@@ -1,8 +1,9 @@
+'use client';
+
 import { useEffect, useState, useRef } from 'react';
 import { LogEvent } from '@log-monitor/types';
 import { MAX_LOGS } from '../../constants';
 import { io, Socket } from 'socket.io-client';
-import { sql } from '@log-monitor/database';
 
 interface UseLogsResult {
   logs: LogEvent[];

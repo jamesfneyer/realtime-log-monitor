@@ -1,62 +1,92 @@
-# Real-time Log Monitor
+# Realtime Log Monitor
 
-A distributed system for real-time log monitoring, processing, and alerting. This project demonstrates modern distributed systems concepts, real-time processing, and full-stack development.
+A distributed system for real-time log monitoring, alerting, and visualization. Built with Next.js, Node.js, TypeScript, Tailwind CSS, and pnpm workspaces.
 
-## Features
+---
 
-- **Log Generator (Producer)**: Emits log events in JSON format at random intervals into Kafka topics
-- **Log Processor (Consumer)**: Processes logs, maintains sliding windows of metrics, and triggers alerts
-- **Dashboard**: Real-time visualization of log statistics and alerts
-- **Storage**: PostgreSQL for persistent storage and Redis for real-time metrics
+## Prerequisites
+- **Node.js** v18 or newer
+- **pnpm** (recommended for workspace support)
+- (Optional) **Docker** (for database/local dev)
 
-## Tech Stack
-
-- **Backend**: Node.js, TypeScript
-- **Message Queue**: Apache Kafka
-- **Database**: PostgreSQL with Drizzle ORM
-- **Caching**: Redis
-- **Frontend**: Next.js, React, Tailwind CSS
-- **Containerization**: Docker Compose
-- **Package Manager**: pnpm workspaces
-
-## Project Structure
-
-```
-.
-├── apps/
-│   ├── dashboard/         # Next.js dashboard application
-│   ├── log-consumer/      # Kafka consumer service
-│   └── log-producer/      # Kafka producer service
-├── packages/
-│   ├── config/           # Shared configuration
-│   ├── database/         # Database models and migrations
-│   ├── types/            # Shared TypeScript types
-│   └── utils/            # Shared utilities
-└── docker/               # Docker Compose configuration
-```
+---
 
 ## Getting Started
 
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+### 1. Clone the repository
+```sh
+git clone https://github.com/jamesfneyer/realtime-log-monitor.git
+cd realtime-log-monitor
+```
 
-2. Start the development environment:
-   ```bash
-   docker-compose up -d
-   pnpm dev
-   ```
+### 2. Install dependencies (from the root)
+```sh
+pnpm install
+```
 
-3. Access the dashboard at http://localhost:3000
+### 3. Start all apps (in separate terminals or with a process manager)
 
-## Development
+#### Dashboard (Next.js frontend)
+```sh
+cd apps/dashboard
+pnpm dev
+```
 
-- Run all services: `pnpm dev`
-- Run specific service: `pnpm --filter <service-name> dev`
-- Build all services: `pnpm build`
-- Run tests: `pnpm test`
+#### Log Consumer (Node.js backend)
+```sh
+cd apps/log-consumer
+pnpm dev
+```
 
-## License
+#### Log Producer (Node.js backend)
+```sh
+cd apps/log-producer
+pnpm dev
+```
 
-MIT
+#### Websocket Server (for real-time updates)
+```sh
+cd apps/websocket-server
+pnpm dev
+```
+
+---
+
+## Project Structure
+```
+realtime-log-monitor/
+  apps/
+    dashboard/         # Next.js 14+ App Router frontend (React, Tailwind)
+    log-consumer/      # Node.js backend for log ingestion and alerting
+    log-producer/      # Node.js backend for log generation/testing
+    websocket-server/  # Real-time WebSocket server
+  packages/
+    database/          # Shared database schema and migration logic
+    types/             # Shared TypeScript types
+  README.md            # (this file)
+  package.json         # pnpm workspace config
+  pnpm-workspace.yaml  # Workspace definition
+```
+
+---
+
+## Tools & Tech
+- [Next.js 14+](https://nextjs.org/) (App Router)
+- [React 18+](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Node.js](https://nodejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [pnpm](https://pnpm.io/) (monorepo/workspace support)
+- [Drizzle ORM](https://orm.drizzle.team/) (database)
+
+---
+
+## Notes
+- All apps use a shared workspace for types and database schema.
+- The dashboard uses a reusable `Card` component for consistent UI/UX.
+- For best results, use VS Code with the Tailwind CSS IntelliSense extension.
+- See each app's README for more details and environment variable setup.
+
+---
+
+For questions or contributions, open an issue or PR!

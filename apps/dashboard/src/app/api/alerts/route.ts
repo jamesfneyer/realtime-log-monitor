@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { alerts } from '@log-monitor/database';
 import { withPaginatedDb } from '../../lib/db';
 import { getPaginationParams } from '../../lib/pagination';

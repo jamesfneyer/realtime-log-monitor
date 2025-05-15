@@ -89,13 +89,24 @@ export function RecentAlerts() {
   }
 
   return (
-    <div className="p-4 border rounded-lg">
-      <h3 className="text-lg font-semibold mb-4">Recent Alerts</h3>
-      <div className="space-y-4">
+    <section className="bg-gray-900 rounded-2xl p-6 shadow-lg border border-gray-700">
+      <h2 className="text-2xl font-bold text-white mb-6">Recent Alerts</h2>
+      <div className="flex flex-col gap-4">
         {alerts.map((alert) => (
-          <AlertEntry key={alert.id} alert={alert} />
+          <div key={alert.id} className="bg-gray-800 rounded-xl p-6 shadow-md">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-lg font-bold text-orange-400">{alert.severity}</span>
+              <span className="text-sm text-gray-400">{format(new Date(alert.timestamp), DATE_FORMAT.TIME)}</span>
+            </div>
+            <div className="text-base text-white mb-2">
+              {alert.message}
+            </div>
+            {alert.metadata && (
+              <pre className="text-xs text-gray-300 bg-gray-900 rounded p-2 overflow-x-auto">{JSON.stringify(alert.metadata, null, 2)}</pre>
+            )}
+          </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 } 
